@@ -1,17 +1,26 @@
+@file:JvmName("NBTFactory")
+
 package net.techcable.spudcompat.spudnbt
 
-import net.techcable.spudcompat.spudnbt.immutable.ImmutableNBTByte
-import net.techcable.spudcompat.spudnbt.immutable.ImmutableNBTCompound
-import net.techcable.spudcompat.spudnbt.immutable.ImmutableNBTInt
-import net.techcable.spudcompat.spudnbt.immutable.ImmutableNBTList
-import net.techcable.spudcompat.spudnbt.simple.SimpleNBTList
+import net.techcable.spudcompat.spudnbt.simple.*
 
-fun <T: NBT> createNbtList(list: List<T>, elementType: NBTType): NBTList<T> = ImmutableNBTList(list, elementType)
+fun <T : NBT> createList(list: List<T>, elementType: NBTType): NBTList<T> = SimpleNBTList(list, elementType)
 
-fun <T: NBT> createMutableNbtList(list: List<T>, elementType: NBTType): MutableNBTList<T> = SimpleNBTList(list, elementType)
+fun createIntList(ints: Collection<NBTNumber<Int>>) = createIntList(ints.map(NBTNumber<Int>::value).toIntArray())
 
-fun <T: NBT> createNBTCompound(map: Map<String, T>): NBTCompound = ImmutableNBTCompound(map)
+fun createIntList(ints: IntArray): NBTIntList = SimpleNBTIntList(ints)
 
-fun createNbtByte(b: Byte): NBTPrimitive<Byte> = ImmutableNBTByte(b)
+fun createByteList(bytes: Collection<NBTNumber<Byte>>) = createByteList(bytes.map(NBTNumber<Byte>::value).toByteArray())
 
-fun createNbtInt(i: Int): NBTPrimitive<Int> = ImmutableNBTInt(i)
+fun createByteList(bytes: ByteArray): NBTByteList = SimpleNBTByteList(bytes)
+
+fun createCompound(elements: Map<String, NBT>): NBTCompound = SimpleNBTCompound(elements)
+
+fun createString(s: String): NBTPrimitive<String> = SimpleNBTString(s)
+
+fun createByte(b: Byte): NBTNumber<Byte> = SimpleNBTByte(b)
+fun createShort(s: Short): NBTNumber<Short> = SimpleNBTShort(s)
+fun createInt(i: Int): NBTNumber<Int> = SimpleNBTInt(i)
+fun createLong(l: Long): NBTNumber<Long> = SimpleNBTLong(l)
+fun createFloat(f: Float): NBTNumber<Float> = SimpleNBTFloat(f)
+fun createDouble(d: Double): NBTNumber<Double> = SimpleNBTDouble(d)

@@ -1,12 +1,14 @@
 package net.techcable.spudcompat.spudnbt
 
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufUtil
+import net.techcable.spudcompat.spudnbt.simple.SimpleNBTString
+import java.io.DataOutput
+
 interface NBTPrimitive<out T>: NBT {
 
     val value: T
 
-    override fun snapshot(): NBTPrimitive<T>
+    override fun clone(): NBTPrimitive<T> = this // Primitives are immutable :p
 
-    override fun clone(): NBTPrimitive<T>
-
-    override fun asMutable() = throw UnsupportedOperationException("Primitives can't be mutable!")
 }

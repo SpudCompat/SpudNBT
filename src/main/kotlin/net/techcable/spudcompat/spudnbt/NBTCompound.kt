@@ -2,23 +2,25 @@ package net.techcable.spudcompat.spudnbt
 
 import io.netty.buffer.ByteBuf
 import net.techcable.spudcompat.spudnbt.io.writeString
+import net.techcable.spudcompat.spudnbt.simple.SimpleNBTCompound
 import java.io.DataOutput
+import java.util.function.BiConsumer
 
-interface NBTCompound : NBT, Map<String, NBT> {
-    override fun snapshot(): NBTCompound
+interface NBTCompound : NBT, MutableMap<String, NBT> {
 
-    override fun clone(): NBTCompound
+    public override fun clone(): NBTCompound
 
-    fun asMutable(): MutableNBTCompound
+    // Overrides standard kotlin Map.forEach
+    fun forEach(action: (Map.Entry<String, NBT>) -> Unit)
 
-    fun forEach(action: (entry: Map.Entry<String, NBT>) -> Unit)
+    // Overrides java 8 Map.forEach (but kotlin doesn't know that)
+    fun forEach(action: BiConsumer<in String, in NBT>) = forEach { action.accept(it.key, it.value) }
 
     override val type: NBTType
         get() = NBTType.COMPOUND
 
     override fun writeValue(out: DataOutput) {
-        out.writeByte(NBTType.COMPOUND.typeId)
-        this.forEach {
+        forEach {
             out.writeString(it.key)
             it.value.writeValue(out)
         }
@@ -26,8 +28,7 @@ interface NBTCompound : NBT, Map<String, NBT> {
     }
 
     override fun writeValue(buffer: ByteBuf) {
-        buffer.writeByte(NBTType.COMPOUND.typeId)
-        this.forEach {
+        forEach {
             buffer.writeString(it.key)
             it.value.writeValue(buffer)
         }

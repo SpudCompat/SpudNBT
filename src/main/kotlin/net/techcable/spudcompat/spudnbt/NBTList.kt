@@ -1,39 +1,35 @@
 package net.techcable.spudcompat.spudnbt
 
 import io.netty.buffer.ByteBuf
+import net.techcable.spudcompat.spudnbt.simple.SimpleNBTByteList
+import net.techcable.spudcompat.spudnbt.simple.SimpleNBTList
 import java.io.DataOutput
+import java.io.IOException
+import java.util.function.Consumer
 
-interface NBTList<T : NBT> : NBT, List<T> {
-    override fun snapshot(): NBTList<T>
+interface NBTList<T : NBT> : NBT, MutableList<T> {
 
-    override fun clone(): NBTList<T>
+    public override fun clone(): NBTList<T>
 
-    fun asMutable(): MutableNBTList<T>
-
-    fun forEach(action: (element: T) -> Unit)
+    fun forEach(action: (T) -> Unit)
 
     override val type: NBTType
         get() = NBTType.LIST
 
     val elementType: NBTType
 
+    @Throws(IOException::class)
     override fun writeValue(out: DataOutput) {
-        out.writeByte(NBTType.LIST.typeId)
         out.writeByte(elementType.typeId)
         out.writeInt(size)
-        forEach { it.writeValue(out) }
+        for (element in this) {
+            element.writeValue(out)
+        }
     }
 
     override fun writeValue(buffer: ByteBuf) {
-        buffer.writeByte(NBTType.LIST.typeId)
         buffer.writeByte(elementType.typeId)
         buffer.writeInt(size)
-        forEach { it.writeValue(buffer) }
-    }
-}
-
-fun verifyListType(list: List<NBT>, elementType: NBTType) {
-    list.forEach {
-        require(elementType.matches(it), { "The NBT is type ${it.type}, not the specified element type $elementType" })
+        forEach { element -> element.write(buffer) }
     }
 }
