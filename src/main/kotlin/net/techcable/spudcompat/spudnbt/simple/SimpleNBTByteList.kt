@@ -17,7 +17,7 @@ internal final class SimpleNBTByteList private constructor(var array: ByteArray,
     override fun clone() = SimpleNBTByteList(this.array.copyOf(size))
 
     override fun forEachByte(action: (Byte) -> Unit) {
-        for (i in 0..size) {
+        for (i in 0..(size - 1)) {
             action(array[i])
         }
     }

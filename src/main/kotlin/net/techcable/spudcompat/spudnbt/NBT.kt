@@ -2,8 +2,7 @@ package net.techcable.spudcompat.spudnbt
 
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufOutputStream
-import net.techcable.spudcompat.spudnbt.io.readString
-import java.io.DataInput
+import net.techcable.spudcompat.spudnbt.io.writeString
 import java.io.DataOutput
 import java.io.IOException
 
@@ -19,18 +18,20 @@ interface NBT : Cloneable {
      */
     val type: NBTType
 
-
     /**
-     * Write this NBT to the specified [DataOutput]
+     * Write this NBT to the specified [DataOutput] with the specified name
      *
      * The value _does_ include type information, unlike [writeValue]
      *
      * @throws IOException if the underlying [DataOutput] has an error and throws an [IOException]
+     *
      * @param out the output to write to
+     * @param name the name of this tag
      */
     @Throws(IOException::class)
-    fun write(out: DataOutput) {
+    fun write(out: DataOutput, name: String) {
         out.writeByte(type.typeId)
+        out.writeString(name)
         this.writeValue(out)
     }
 
@@ -40,10 +41,12 @@ interface NBT : Cloneable {
      *
      * The value _does_ include type information, unlike [writeValue]
      *
-     * @param out the output to write to
+     * @param buffer the output to write to
+     * @param name the name of this tag
      */
-    fun write(buffer: ByteBuf) {
+    fun write(buffer: ByteBuf, name: String) {
         buffer.writeByte(type.typeId)
+        buffer.writeString(name)
         this.writeValue(buffer)
     }
 
@@ -51,7 +54,8 @@ interface NBT : Cloneable {
      * Write the _value of_ NBT to the specified [DataOutput]
      *
      * **The value doesn't include type information**, and thus is incorrect for the majority of use-cases
-     * Normally you should use [write], unless you actually don't want type information
+     * It also _isn't inside a root tag_, and thus isn't applicable for the first element in a file/packet
+     * Normally you should use [writeNBT], unless you actually don't want type information
      *
      * @throws IOException if the underlying [DataOutput] has an error and throws an [IOException]
      * @param out the output to write to
@@ -62,8 +66,8 @@ interface NBT : Cloneable {
     /**
      * Write the _value of_ this NBT to the specified [ByteBuf]
      *
-     * **The value doesn't include type information**, and thus is incorrect for the magority of use-cases
-     * Normally  you should use [write], unless you actually don't want type information
+     * **The value doesn't include type information**, and thus is incorrect for the majority of use-cases
+     * Normally  you should use [writeNBT], unless you actually don't want type information
      *
      * @param buffer the buffer to write to
      */
@@ -74,7 +78,7 @@ interface NBT : Cloneable {
     /**
      * Clone this nbt tag
      */
-    override fun clone(): NBT;
+    override fun clone(): NBT
 
     // Helpful Converters
 

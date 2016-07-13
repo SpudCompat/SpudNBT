@@ -1,6 +1,10 @@
 package net.techcable.spudcompat;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -74,14 +78,32 @@ public class ParsingTest {
             .build();
 
     @Test
-    public void testHelloWorld() throws IOException  {
+    public void testReadHelloWorld() throws IOException {
         NBTCompound helloWorld = NBTIO.readNBT(new DataInputStream(getClass().getResourceAsStream("/hello_world.nbt")));
         Assert.assertEquals(HELLO_WORLD_NBT, helloWorld);
     }
 
     @Test
-    public void testComplex() throws IOException {
+    public void testReadComplex() throws IOException {
         NBTCompound complex = NBTIO.readNBT(new DataInputStream(new GZIPInputStream(getClass().getResourceAsStream("/complex.nbt"))));
         Assert.assertEquals(COMPLEX_NBT, complex);
+    }
+
+    @Test
+    public void testWriteHelloWorld() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        HELLO_WORLD_NBT.write(new DataOutputStream(out), "hello world");
+        byte[] serialized = out.toByteArray();
+        NBTCompound helloWorld = NBTIO.readNBT(new DataInputStream(new ByteArrayInputStream(serialized)));
+        Assert.assertEquals("Serialized NBT doesn't equal input NBT", HELLO_WORLD_NBT, helloWorld);
+    }
+
+    @Test
+    public void testWriteComplex() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        COMPLEX_NBT.write(new DataOutputStream(out), "Level");
+        byte[] serialized = out.toByteArray();
+        NBTCompound complexNbt = NBTIO.readNBT(new DataInputStream(new ByteArrayInputStream(serialized)));
+        Assert.assertEquals("Serialized NBT doesn't equal input NBT", COMPLEX_NBT, complexNbt);
     }
 }

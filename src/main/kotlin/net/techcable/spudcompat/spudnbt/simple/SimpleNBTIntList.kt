@@ -17,7 +17,7 @@ internal final class SimpleNBTIntList private constructor(var array: IntArray, o
     override fun clone() = SimpleNBTIntList(this.array.copyOf(size))
 
     override fun forEachInt(action: (Int) -> Unit) {
-        for (i in 0..size) {
+        for (i in 0..(size - 1)) {
             action(array[i])
         }
     }

@@ -16,7 +16,7 @@ internal final class SimpleNBTString(override val value: String) : NBTPrimitive<
     }
 
     override val type: NBTType
-        get() = NBTType.BYTE
+        get() = NBTType.STRING
 
     override fun toString() = "\"$value\"";
 

@@ -30,6 +30,6 @@ interface NBTList<T : NBT> : NBT, MutableList<T> {
     override fun writeValue(buffer: ByteBuf) {
         buffer.writeByte(elementType.typeId)
         buffer.writeInt(size)
-        forEach { element -> element.write(buffer) }
+        forEach { element -> element.writeValue(buffer) }
     }
 }

@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufUtil
 import java.io.DataInput
 import java.io.DataOutput
+import java.io.EOFException
 
 fun DataOutput.writeString(str: String) {
     assert('\u0000' !in str, { "String $str contains a null character!" })

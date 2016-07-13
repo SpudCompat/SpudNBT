@@ -22,16 +22,14 @@ interface NBTCompound : NBT, MutableMap<String, NBT> {
 
     override fun writeValue(out: DataOutput) {
         forEach {
-            out.writeString(it.key)
-            it.value.writeValue(out)
+            it.value.write(out, it.key)
         }
         out.writeByte(0)
     }
 
     override fun writeValue(buffer: ByteBuf) {
         forEach {
-            buffer.writeString(it.key)
-            it.value.writeValue(buffer)
+            it.value.write(buffer, it.key)
         }
         buffer.writeByte(0)
     }

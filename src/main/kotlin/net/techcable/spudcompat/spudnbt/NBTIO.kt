@@ -37,13 +37,13 @@ fun ByteBuf.readNBTOrThrow(): NBT = readNBT() ?: throw IllegalArgumentException(
  * Read the nbt from the input, returning null if nbt is not present
  *
  * @throws IllegalArgumentException if the nbt is not in a valid format
- * @return the nbt, or null if none
+ * @return the nbt, or null if not present
  */
-fun DataInput.readNBT(): NBTCompound? {
+fun DataInput.readNBTIfPresent(): NBTCompound? {
     val typeId = this.readByte().toInt()
     when (typeId) {
         0 -> return null
-        NBTType.COMPOUND.typeId -> {} // Hooray!
+        NBTType.COMPOUND.typeId -> {} // Hooray its a compound like we expected!
         else -> throw IllegalArgumentException("Expected a root compound tag but got type id $typeId")
     }
     this.readString() // Read (but ignore) the name of the root tag
@@ -57,14 +57,4 @@ fun DataInput.readNBT(): NBTCompound? {
  * @throws IllegalArgumentException if the nbt is not in a valid format
  * @return the nbt
  */
-fun DataInput.readNBTOrThrow(): NBTCompound = readNBT() ?: throw IllegalArgumentException("NBT isn't present!")
-
-fun ByteBuf.writeNBT(nbt: NBT?) {
-    if (nbt != null) {
-        nbt.write(this)
-    } else {
-        this.writeByte(0)
-    }
-}
-
-fun DataOutput.writeNBT(nbt: NBT?) = if (nbt != null) nbt.write(this) else this.writeByte(0)
+fun DataInput.readNBT(): NBTCompound = readNBTIfPresent() ?: throw IllegalArgumentException("NBT isn't present!")
