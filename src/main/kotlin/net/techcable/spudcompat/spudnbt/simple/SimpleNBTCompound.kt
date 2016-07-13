@@ -12,11 +12,19 @@ internal final class SimpleNBTCompound private constructor(val map: LinkedHashMa
     @Suppress("UNCHECKED_CAST") // Its safe
     override fun clone() = SimpleNBTCompound(LinkedHashMap(map))
 
+    constructor(initialCapacity: Int): this(LinkedHashMap(initialCapacity))
+
     constructor(): this(LinkedHashMap())
 
     constructor(map: Map<String, NBT>): this(LinkedHashMap(map))
 
+    override fun putIfAbsent(key: String, value: NBT): NBT? = map.putIfAbsent(key, value)
+
     override fun forEach(action: (Map.Entry<String, NBT>) -> Unit) {
         map.forEach({ name, value -> action(Maps.immutableEntry(name, value)) })
     }
+
+    override fun hashCode() = super.standardHashCode()
+
+    override fun equals(other: Any?) = other is NBTCompound && super.standardEquals(other)
 }

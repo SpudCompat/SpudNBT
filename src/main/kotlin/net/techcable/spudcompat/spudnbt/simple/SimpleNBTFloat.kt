@@ -12,4 +12,10 @@ internal final class SimpleNBTFloat(override val value: Float): NBTNumber<Float>
 
     override val type: NBTType
         get() = NBTType.FLOAT
+
+    override fun equals(other: Any?) = other is NBTNumber<*> && other.value is Float && other.value.equals(this.value)
+
+    override fun hashCode() = value.hashCode()
+
+    override fun toString() = "${value.toString()}f"
 }

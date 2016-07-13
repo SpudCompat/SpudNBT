@@ -12,4 +12,10 @@ internal final class SimpleNBTDouble(override val value: Double): NBTNumber<Doub
 
     override val type: NBTType
         get() = NBTType.DOUBLE
+
+    override fun equals(other: Any?) = other is NBTNumber<*> && other.value is Double && other.value.equals(this.value)
+
+    override fun hashCode() = value.hashCode()
+
+    override fun toString() = value.toString()
 }

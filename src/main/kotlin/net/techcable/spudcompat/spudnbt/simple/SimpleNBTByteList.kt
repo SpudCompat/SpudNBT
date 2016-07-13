@@ -139,4 +139,8 @@ internal final class SimpleNBTByteList private constructor(var array: ByteArray,
         }
         return modified
     }
+
+    override fun toByteArray() = array.copyOf(size)
+
+    override fun equals(other: Any?) =  other is NBTByteList && super.equals(other)
 }

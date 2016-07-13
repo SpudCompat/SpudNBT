@@ -11,4 +11,10 @@ internal final class SimpleNBTByte(override val value: Byte) : NBTNumber<Byte> {
 
     override val type: NBTType
         get() = NBTType.BYTE
+
+    override fun equals(other: Any?) = other is NBTNumber<*> && other.value is Byte && other.value.equals(this.value)
+
+    override fun hashCode() = value.hashCode()
+
+    override fun toString() = "${value}b"
 }

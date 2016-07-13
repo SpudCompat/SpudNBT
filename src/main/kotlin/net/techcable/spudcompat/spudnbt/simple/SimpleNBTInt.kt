@@ -12,4 +12,10 @@ internal final class SimpleNBTInt(override val value: Int) : NBTNumber<Int> {
 
     override val type: NBTType
         get() = NBTType.INT
+
+    override fun equals(other: Any?) = other is NBTNumber<*> && other.value is Int && other.value.equals(this.value)
+
+    override fun hashCode() = value.hashCode()
+
+    override fun toString() = value.toString()
 }

@@ -139,4 +139,8 @@ internal final class SimpleNBTIntList private constructor(var array: IntArray, o
         }
         return modified
     }
+
+    override fun toIntArray() = array.copyOf(size)
+
+    override fun equals(other: Any?) = other is NBTIntList && super.equals(other)
 }

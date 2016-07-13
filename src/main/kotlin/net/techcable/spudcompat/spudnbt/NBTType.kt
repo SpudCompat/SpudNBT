@@ -42,14 +42,14 @@ enum class NBTType {
             val size = buffer.readInt()
             val bytes = ByteArray(size)
             buffer.readBytes(bytes, 0, size)
-            return createByteList(bytes)
+            return createByteList(*bytes)
         }
 
         override fun readValue(input: DataInput): NBTByteList {
             val size = input.readInt()
             val bytes = ByteArray(size)
             input.readFully(bytes, 0, size)
-            return createByteList(bytes)
+            return createByteList(*bytes)
         }
     },
     STRING {
@@ -61,7 +61,7 @@ enum class NBTType {
         override fun readValue(buffer: ByteBuf): NBTList<*> {
             val elementType = fromId(buffer.readByte().toInt())
             val size = buffer.readInt()
-            val list = createList<NBT>(size, elementType)
+            val list = createList<NBT>(elementType, size)
             for (i in 0..size) {
                 list.add(elementType.readValue(buffer))
             }
@@ -71,8 +71,8 @@ enum class NBTType {
         override fun readValue(input: DataInput): NBTList<*> {
             val elementType = fromId(input.readByte().toInt())
             val size = input.readInt()
-            val list = createList<NBT>(size, elementType)
-            for (i in 0..size) {
+            val list = createList<NBT>(elementType, size)
+            for (i in 0..(size - 1)) {
                 list.add(elementType.readValue(input))
             }
             return list
@@ -120,7 +120,7 @@ enum class NBTType {
             for (i in 0..ints.size) {
                 ints[i] = buffer.readInt()
             }
-            return createIntList(ints)
+            return createIntList(*ints)
         }
 
         override fun readValue(input: DataInput): NBTIntList {
@@ -129,7 +129,7 @@ enum class NBTType {
             for (i in 0..ints.size) {
                 ints[i] = input.readInt()
             }
-            return createIntList(ints)
+            return createIntList(*ints)
         }
     };
 

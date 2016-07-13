@@ -12,4 +12,10 @@ internal final class SimpleNBTShort(override val value: Short) : NBTNumber<Short
 
     override val type: NBTType
         get() = NBTType.SHORT
+
+    override fun equals(other: Any?) = other is NBTNumber<*> && other.value is Short && other.value.equals(this.value)
+
+    override fun hashCode() = value.hashCode()
+
+    override fun toString() = "${value.toString()}s"
 }

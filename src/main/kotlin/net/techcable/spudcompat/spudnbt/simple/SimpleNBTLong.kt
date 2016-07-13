@@ -12,4 +12,10 @@ internal final class SimpleNBTLong(override val value: Long) : NBTNumber<Long> {
 
     override val type: NBTType
         get() = NBTType.LONG
+
+    override fun equals(other: Any?) = other is NBTNumber<*> && other.value is Long && other.value.equals(this.value)
+
+    override fun hashCode() = value.hashCode()
+
+    override fun toString() = "${value.toString()}l"
 }

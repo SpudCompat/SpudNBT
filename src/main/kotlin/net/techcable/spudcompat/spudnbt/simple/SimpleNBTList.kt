@@ -73,4 +73,10 @@ internal final class SimpleNBTList<T : NBT> private constructor(val delegate: Ar
     override fun subList(fromIndex: Int, toIndex: Int): MutableList<T> {
         return super.standardSubList(fromIndex, toIndex) // mo-safety
     }
+
+    override fun equals(other: Any?) = other is NBTList<*> && other.elementType == this.elementType && super.standardEquals(other)
+
+    override fun hashCode() = super.standardHashCode()
+
+    override fun toString() = super.standardToString()
 }

@@ -61,4 +61,5 @@ interface NBTByteList : NBTList<NBTNumber<Byte>> {
      */
     fun removeIf(predicate: (Byte) -> Boolean): Boolean
 
+    fun toByteArray(): ByteArray
 }

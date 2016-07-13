@@ -17,4 +17,10 @@ internal final class SimpleNBTString(override val value: String) : NBTPrimitive<
 
     override val type: NBTType
         get() = NBTType.BYTE
+
+    override fun toString() = "\"$value\"";
+
+    override fun equals(other: Any?) = other is NBTPrimitive<*> && other.value is String && this.value.equals(other.value)
+
+    override fun hashCode() = value.hashCode()
 }

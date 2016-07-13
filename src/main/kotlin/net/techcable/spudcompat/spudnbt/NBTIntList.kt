@@ -61,4 +61,5 @@ interface NBTIntList : NBTList<NBTNumber<Int>> {
      */
     fun removeIf(predicate: (Int) -> Boolean): Boolean
 
+    fun toIntArray(): IntArray
 }
