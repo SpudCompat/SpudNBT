@@ -4,6 +4,10 @@ package net.techcable.spudcompat.spudnbt
 
 import net.techcable.spudcompat.spudnbt.simple.*
 
+fun <T: NBT> createList(capacity: Int, elementType: NBTType): NBTList<T> = SimpleNBTList(capacity, elementType)
+
+fun <T : NBT> createList(elementType: NBTType): NBTList<T> = SimpleNBTList(elementType)
+
 fun <T : NBT> createList(list: List<T>, elementType: NBTType): NBTList<T> = SimpleNBTList(list, elementType)
 
 fun createIntList(ints: Collection<NBTNumber<Int>>) = createIntList(ints.map(NBTNumber<Int>::value).toIntArray())
@@ -13,6 +17,8 @@ fun createIntList(ints: IntArray): NBTIntList = SimpleNBTIntList(ints)
 fun createByteList(bytes: Collection<NBTNumber<Byte>>) = createByteList(bytes.map(NBTNumber<Byte>::value).toByteArray())
 
 fun createByteList(bytes: ByteArray): NBTByteList = SimpleNBTByteList(bytes)
+
+fun createCompound(): NBTCompound = SimpleNBTCompound()
 
 fun createCompound(elements: Map<String, NBT>): NBTCompound = SimpleNBTCompound(elements)
 

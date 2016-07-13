@@ -12,6 +12,8 @@ internal final class SimpleNBTCompound private constructor(val map: LinkedHashMa
     @Suppress("UNCHECKED_CAST") // Its safe
     override fun clone() = SimpleNBTCompound(LinkedHashMap(map))
 
+    constructor(): this(LinkedHashMap())
+
     constructor(map: Map<String, NBT>): this(LinkedHashMap(map))
 
     override fun forEach(action: (Map.Entry<String, NBT>) -> Unit) {

@@ -16,6 +16,10 @@ internal final class SimpleNBTList<T : NBT> private constructor(val delegate: Ar
     override fun clone(): NBTList<T> = SimpleNBTList(ArrayList(delegate), elementType)
 
 
+    constructor(elementType: NBTType): this(ArrayList(), elementType)
+
+    constructor(capacity: Int, elementType: NBTType): this(ArrayList(capacity), elementType)
+
     constructor(list: List<T>, elementType: NBTType) : this(ArrayList(list), elementType) {
         elementType.verifyMatchesAll(list)
     }
